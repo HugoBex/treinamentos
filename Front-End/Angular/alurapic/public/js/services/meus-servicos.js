@@ -1,48 +1,51 @@
 angular.module('meusServicos', ['ngResource'])
-    .factory('recursoFoto', function($resource) {
+	.factory('recursoFoto', function($resource) {
 
-        return $resource('/v1/fotos/:fotoId', null, {
-            'update': {
-                method: 'PUT'
-            }
-        });
-    })
-    .factory('cadastroDeFotos', function(recursoFoto) {
+		return $resource('/v1/fotos/:fotoId', null, {
+			'update' : { 
+				method: 'PUT'
+			}
+		});
+	})
+	.factory("cadastroDeFotos", function(recursoFoto, $q, $rootScope) {
+		
+		var evento = 'fotoCadastrada';
 
-        var servicoFoto = {};
+		var service = {};
 
-        servicoFoto.cadastrar = function(foto, $q) {
-            return $q(
-                function(resolve, reject) {
-                    if (foto_id) {
-                        recursoFoto.update({ fotoId: foto_id }, foto, function() {
-                            resolve({
-                                mensagem: "Foto " + foto_id + " atualizada com sucesso.",
-                                inclusao: false
-                            });
-                        }, function(erro) {
-                            console.log("Erro ao atualizar imagem");
-                            reject({
-                                mensagem: "Falha ao atualizar a imagem " + foto_id
-                            });
-                        })
-                    } else {
-                        recursoFoto.save(foto,
-                            function() {
-                                resolve({
-                                    mensagem: "Foto " + foto.titulo + "incluída com sucesso",
-                                    inclusao: true
-                                });
-                            },
-                            function(erro) {
-                                console.log("Erro ao cadastrar foto " + foto.titulo);
-                                reject({
-                                    mensagem: "Erro ao cadastrar a foto " + foto.titulo
-                                });
-                            });
-                    }
-                });
-        }
+		service.cadastrar = function(foto) {
+			return $q(function(resolve, reject) {
 
-        return servicoFoto;
+				if(foto._id) {
+					recursoFoto.update({fotoId: foto._id}, foto, function() {
+
+						$rootScope.$broadcast(evento);
+						resolve({
+							mensagem: 'Foto ' + foto.titulo + ' atualizada com sucesso',
+							inclusao: false
+						});
+					}, function(erro) {
+						console.log(erro);
+						reject({
+							mensagem: 'Não foi possível atualizar a foto ' + foto.titulo
+						});
+					});
+
+				} else {
+					recursoFoto.save(foto, function() {
+						$rootScope.$broadcast(evento);
+						resolve({
+							mensagem: 'Foto ' + foto.titulo + ' incluída com sucesso',
+							inclusao: true
+						});
+					}, function(erro) {
+						console.log(erro);
+						reject({
+							mensagem: 'Não foi possível incluir a foto ' + foto.titulo
+						});
+					});
+				}
+			});
+		};
+		return service;
     });
