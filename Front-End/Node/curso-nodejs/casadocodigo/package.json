@@ -1,0 +1,24 @@
+{
+    "name": "casadocodigo",
+    "version": "1.0.0",
+    "description": "Treinamento NodeJs e Simulação do site Casa do Código",
+    "main": "app.js",
+    "scripts": {
+        "test": "./node_modules/.bin/mocha --reporter spec",
+        "debug": "node --nolazy --debug-brk=5858 app.js"
+    },
+    "author": "Hugo Silva",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.16.1",
+        "ejs": "^2.5.5",
+        "express": "^4.14.0",
+        "express-load": "^1.1.15",
+        "express-validator": "^3.1.2",
+        "mysql": "^2.13.0"
+    },
+    "devDependencies": {
+        "mocha": "^3.2.0",
+        "supertest": "^3.0.0"
+    }
+}

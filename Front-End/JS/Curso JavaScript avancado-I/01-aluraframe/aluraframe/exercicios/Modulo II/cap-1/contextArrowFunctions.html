@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<p>Teste de contexto JS - Verificar console Navegador</p>
+
+<body>
+
+    <script>
+        console.log("\nImprime o contexto atual.");
+        console.log(this);
+        let nomes = ['Flávio', 'Nico', 'Douglas'];
+
+        class SistemaImpressao {
+
+            constructor() {
+                this._codigo = 2;
+            }
+
+            imprimeComArrowFunction(nomes) {
+                console.log("\nUsando arrow function.");
+                nomes.forEach(nome => {
+                    console.log(this);
+                    console.log(`${this._codigo}: ${nome}`);
+                });
+            }
+
+            imprimeSemArrowFunction(nomes) {
+                console.log("\nUsando função commun.")
+                nomes.forEach(function(nome) {
+                    console.log(this);
+                    console.log(`${this._codigo}: ${nome}`);
+                });
+            }
+        }
+
+        let si = new SistemaImpressao();
+
+        // imprime de acordo com o contexto da arrow function
+        si.imprimeComArrowFunction(nomes);
+
+        // imprime de acordo com o contexto da função comum 
+        // deve ocorrer um erro de referencia para this, pois esse faz referencia a Window e não a class SistemaImpressao
+        si.imprimeSemArrowFunction(nomes);
+    </script>
+</body>
+
+</html>
